@@ -269,9 +269,9 @@ def generate_ccd(disc_toc_dict, leadout_pos):
             print("exiting...")
             quit()
 # putting index 0 seems to break things so we are only going to do index 1. TODO need to test
-#        for index in disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']:
-#            ccd_tracklist += 'INDEX ' + index + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes'][str(index)]['atime'])) + '\n'
-        ccd_tracklist += 'INDEX 1' + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']['1']['atime'])) + '\n'
+        for index in disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']:
+            ccd_tracklist += 'INDEX ' + index + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes'][str(index)]['atime'])) + '\n'
+####        ccd_tracklist += 'INDEX 1' + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']['1']['atime'])) + '\n'
         track_number += 1
         
     ccd += ccd_tracklist
@@ -489,7 +489,7 @@ def append_track_sizes_in_frames(disc_toc, leadout_position_in_frames):
 
     previous_track_beginning = leadout_position_in_frames
     for track in sorted(disc_toc, reverse=True):
-        for index in sorted(disc_toc[track]['indexes'], reverse=True):
+        for index in sorted(disc_toc[track]['indexes'], key=int, reverse=True):
             track_beginning = minsec2frames(disc_toc[track]['indexes'][index]['atime'])
             index_size_in_frames = previous_track_beginning - track_beginning
             disc_toc[track]['indexes'][index]['frame_size'] = index_size_in_frames
