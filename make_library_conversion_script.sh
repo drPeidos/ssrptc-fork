@@ -8,7 +8,7 @@
 
 echo "#!/bin/bash" > unar_script.sh
 echo "set -x -e" >> unar_script.sh
-
+echo "exec > >(tee -a script.log) 2>&1" >> unar_script.sh
 
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
@@ -16,3 +16,5 @@ for i in $(LANG=C; find .. -type f -name "*.7z" -exec basename {} '.7z' \; | sor
     echo "unar \"../$i.7z\"; cd \"$i\"; ../ssrptc/cue2ccd.py \"$i.cue\"; ../ssrptc/bin2img.sh; rm *.bin; cd .."
 done >> unar_script.sh
 IFS=$SAVEIFS
+
+chmod +x unar_script.sh
