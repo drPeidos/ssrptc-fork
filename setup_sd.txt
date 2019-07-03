@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+# # dd if=/dev/zero of=/dev/sdX status=progress # maybe this isnt necessary
+# # echo 'type=b' | sfdisk /dev/sdX
+# # mkdosfs -F 32  -s 64 /dev/sdXy
+# # mount /dev/sdb1 /mnt/usb
+# # cd /mnt/usb
+# # for i in $(seq -f "%02g" 1 999); do mkdir $i; done
+# # mkdir 00_saturn_discs
+# # # copy over all rmenu stuff into the 01 folder
+# # # copy over games into /mnt/usb/00_saturn_discs/
+# # # you can keep original folder names
+# # # copy or create Phoebe.ini in /mnt/usb/
+# # # once you have copied over all games, unmount
+# # umount /mnt/usb
+
+
+
+
+
+# # i=2; for CLUSTER in $(fatcat /dev/sdb1 -l 00_saturn_discs | grep '^d ' | egrep -v '  ./|  ../' | cut -d' ' -f 5- | sort | awk -F'=' '{print $NF}'); do export INDEX="$(printf "%02d\n" $i)"; echo "i = $i    CLUSTER = $CLUSTER    INDEX = $INDEX"; fatcat /dev/sdb1 -e /$INDEX/ -c $CLUSTER; let "i+=1"; done
+

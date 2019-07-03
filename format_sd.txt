@@ -1,8 +1,0 @@
-#!/bin/bash
-
-
-# use fdisk to make one partition that is the entire size, and set the type to fat32
-
-# you must set the sectors-per-cluster size to 64 or phoebe will not read it
-
-# $ mkdosfs -F 32  -s 64 /dev/sdbX
