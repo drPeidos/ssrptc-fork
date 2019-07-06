@@ -268,10 +268,8 @@ def generate_ccd(disc_toc_dict, leadout_pos):
             print("unknown track mode: {}".format(disc_toc_dict['track' + "{0:02d}".format(track_number)]['mode']))
             print("exiting...")
             quit()
-# putting index 0 seems to break things so we are only going to do index 1. TODO need to test
         for index in disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']:
             ccd_tracklist += 'INDEX ' + index + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes'][str(index)]['atime'])) + '\n'
-####        ccd_tracklist += 'INDEX 1' + '=' + str(minsec2frames(disc_toc_dict['track' + "{0:02d}".format(track_number)]['indexes']['1']['atime'])) + '\n'
         track_number += 1
         
     ccd += ccd_tracklist
@@ -287,7 +285,6 @@ def list_files(disc_toc_dict):
             file_list.append(next_file)
             last_file = next_file
     return file_list
-    
 
 def create_imgfile_from_bin():
     return 0
@@ -299,13 +296,6 @@ def get_total_bin_size(disc_toc_dict, cue_file_location):
        full_file_path = path + '/' + current_file
        total_bin_size += os.path.getsize(full_file_path)       
     return total_bin_size
-
-
-def adjust_multi_bin_timings(disc_toc_dict):
-#    timing = '00:00:00'
-#    for key in disc_toc_dict:
-    return 0        
-
 
 def generate_sub_file(disc_toc_dict):
 #  |----  P  CHANNEL  ----||----  Q  CHANNEL  ----||----  R  CHANNEL  ----||----  S  CHANNEL  ----||----  T  CHANNEL  ----||----  U  CHANNEL  ----||----  V  CHANNEL  ----||----  W  CHANNEL  ----|
@@ -367,12 +357,6 @@ def generate_sub_file(disc_toc_dict):
             time_dict['af'] += 1
         #print(disc_toc_dict[track_]['indexes']['1'])
         if index_number == '0':
-#            print(time_dict)
-            #if time_dict['rf'] == 0 and time_dict['rs'] == 0 and time_dict['rm'] == 0:
-            #    pregap_mode = False
-#            if pregap_mode == False:
-#                pregap_mode = True
-
             if time_dict['rf'] == 0:
                 time_dict['rf'] += 74
                 if time_dict['rs'] == 0:
@@ -402,23 +386,16 @@ def generate_sub_file(disc_toc_dict):
     total_frames = (total_bin_size / 2352)
     track_number = 1
     for track_ in disc_toc_dict:
-#    for track_ in ['track01', 'track02', 'track03']:
-#    for track_ in ['track02']:
         track_number = track_.split("track")[-1]
-#        print(track_)
         for index in disc_toc_dict[track_]['indexes']:
-#            print(index)
             if index == '0':
                 index_rtime_offset = disc_toc_dict[track_]['indexes']['1']['rtime']
-        #        print(index_rtime_offset)
                 time_dict['rm'] = int(index_rtime_offset.split(":")[0])
                 time_dict['rs'] = int(index_rtime_offset.split(":")[1])
                 time_dict['rf'] = int(index_rtime_offset.split(":")[2])
 
             frame = 1
             while frame <= disc_toc_dict[track_]['indexes'][index]['frame_size']:
-#                print("{}    track_time {}".format(track_, frames2minsec(disc_toc_dict[track_]['indexes'][index]['frame_size'])))
-#                print(time_dict)
                 if disc_toc_dict['track' + str(track_number)]['mode'] == 'MODE1/2352' or disc_toc_dict['track' + str(track_number)]['mode'] == 'MODE2/2352':
                     a = '4'
                 elif disc_toc_dict['track' + str(track_number)]['mode'] == 'AUDIO':
@@ -430,7 +407,6 @@ def generate_sub_file(disc_toc_dict):
                 b = '1'
                 cd = "{:02d}".format(int(track_number))
                 ef = "{:02d}".format(int(index))
-#                print(time_dict)
                 gh = "{:02d}".format(time_dict['rm']) # just have this count up by 1 for each frame loop!!
                 ij = "{:02d}".format(time_dict['rs'])
                 kl = "{:02d}".format(time_dict['rf'])
@@ -445,28 +421,21 @@ def generate_sub_file(disc_toc_dict):
                 Q = abcdefghijklmnopqrst + uvwx
                 SUBCHANNEL = P + Q + R + S + T + U + V + W
                 subfile_out.write(bytes.fromhex(SUBCHANNEL))
-                #if len(QCHANNEL) != 24:
-                #    print("error")
-                #    quit()
-                #print(QCHANNEL)
-                #print(uvwx) 
-                #if len(bytes.fromhex(QCHANNEL)) != 12:
-                #    print("error 2")
-                #    quit()
-                #quit()
                 frame += 1
                 mmssff_counter(time_dict, index, disc_toc_dict)
     subfile_out.close()
 
 def make_crc_table():
 # this a simplified version of gen_table() from pycrc/crc_algorithms.py
-    tbl = [] 
+    tbl = []
+    x = 2 
+    polynomial = ((x**16)+(x**12)+(x**5)+(1)) & 0xffff # 0x1021
     for i in range(256):
         reg = i 
         reg = reg << (8)
         for bit in range(8):
             if reg & (0x8000 << 0) != 0:
-                reg = (reg << 1) ^ (0x1021 << 0)
+                reg = (reg << 1) ^ (polynomial << 0)
             else:
                 reg = (reg << 1)
         tbl.append((reg >> 0) & 0xffff)
@@ -497,77 +466,14 @@ def append_track_sizes_in_frames(disc_toc, leadout_position_in_frames):
             
     return disc_toc
 
-# ./cue2ccd.py > /tmp/ccdout.ccd
-# find . -iname "*.bin" | sort | xargs -I {} cat {} >> out.img
-# find . -iname "*.bin" | sort | xargs -I {} sh -c 'echo "{}"; cat "{}" >> out.img;'
-
-
-#cuefile = "/mnt/extra/saturn/Vatlv (J)(Saturn)/iso_saturn.cue"
-#cuefile = "/mnt/extra/saturn/redump/Vatlva (Japan) (Rev A)/Vatlva (Japan) (Rev A).cue"
-#cuefile = "/mnt/sshfs_srv/mnt/8tb_second/torrent/downloads/Sega - Saturn (20180710 13-19-52)/Battle Garegga (Japan)/Battle Garegga (Japan).cue"
-#cuefile = "/mnt/extra/saturn/Battle Garegga (Japan)/Battle Garegga (Japan).cue"
-#cuefile = "/mnt/extra/saturn/Cotton Boomerang (J)(Saturn)/192 Cotton Boomerang (J).cue" 
-#cuefile = "/mnt/extra/saturn/redump/Batman Forever - The Arcade Game (USA)/Batman Forever - The Arcade Game (USA).cue"
-#cuefile = "/mnt/extra/saturn/redump/Magical Night Dreams - Cotton Boomerang (Japan)/Magical Night Dreams - Cotton Boomerang (Japan).cue"
-#cuefile = "/mnt/extra/saturn/redump/Break Point Tennis (USA)/Break Point Tennis (USA).cue"
-#cuefile = "/mnt/extra/saturn/redump/Sonic R (USA, Brazil)/Sonic R (USA, Brazil).cue"
 cuefile = os.path.realpath(sys.argv[1])
-
-
-
 disc_toc = generate_nested_dict_from_cuefile(cuefile)
-#number_of_files = how_many_files(disc_toc)
-#if number_of_files > 1:
-#    create_imgfile_from_bin()
-#    disc_toc = adjust_multi_bin_timings(disc_toc)
-
-
-
-
-#print(disc_toc)
-#print(len(disc_toc))
-#print(how_many_files(disc_toc))
-
-#print(frames2minsec(94350))
-#print(list_files(disc_toc))
-#print(get_total_bin_size(disc_toc, cuefile) / 2352)
-#print(leadout_position_in_frames)
-
-
-
-
-
 total_bin_size = get_total_bin_size(disc_toc, cuefile)
 leadout_position_in_frames = bytes2frames(total_bin_size)
 disc_toc = append_track_sizes_in_frames(disc_toc, leadout_position_in_frames)
-
-
 ccd = generate_ccd(disc_toc, leadout_position_in_frames)
-#print(ccd)
-
 f = open("./out.ccd","w") #opens file with name of "test.txt"
 f.write(ccd)
 f.close()
-
-
-
-
-
-
-
-#print(disc_toc)
-
 table = make_crc_table()
 sub = generate_sub_file(disc_toc)
-#print(sub)
-
-
-
-####    final_index = sorted(disc_toc_dict['track' + str(len(disc_toc_dict))]['indexes'])[-1]
-####    final_index_time = disc_toc_dict['track' + str(len(disc_toc_dict))]['indexes'][final_index]
-# http://forum.redump.org/topic/4495/sega-saturn-megacd-dumping-guide-updated-28112010/
-# diff <(xxd -c1 -g1 Magical\ Night\ Dreams\ -\ Cotton\ Boomerang\ \(Japan\)\ \(Track\ 1\).bin) <(xxd -c1 -g1 regionpatched_track1.bin) > bytes_differences.diff
-# mkdosfs -F 32  -s 64 /dev/sdb1
-
-# mkdir ccd; cd ccd
-# SAVEIFS=$IFS; IFS=$(echo -en "\n\b"); for i in $(LANG=C; find .. -type f -name "*.7z" -exec basename {} '.7z' \; | sort); do echo "unar \"../$i.7z\"; cd \"$i\"; ../ssrptc/cue2ccd.py \"$i.cue\"; ../ssrptc/bin2img.sh; rm *.bin; cd .."; done > unar_script.sh; IFS=$SAVEIFS
