@@ -7,12 +7,13 @@ if [ x"$1" = 'x013' ]; then
     ZEROBIN='RMENU_013.BIN'
 elif [ x"$1" = 'x020' ]; then
     ZEROBIN='RMENU_020.BIN'
-elif [ x"$1" = 'xkai' ]; then
+elif [ x"$1" = 'xkai' ] || [ x"$1" = 'xpsk' ]; then
     ZEROBIN='RMENU_KAI_6314.BIN'
 else
-    echo 'you must choose which version of RMENU you want and provide it as $2'
-    echo 'options are 013 or 020 or kai'
+    echo 'you must choose which version of RMENU you want and provide it as the only arguement'
+    echo 'options are 013 or 020 or kai or psk'
     echo 'example: ./rmenu.sh kai'
+    exit 1
 fi
 
 

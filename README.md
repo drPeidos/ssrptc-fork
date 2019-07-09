@@ -1,3 +1,4 @@
+#!/bin/false 
 ```
 
 SSRPTC - Sega Saturn Rhea Phoebe Tool Collection

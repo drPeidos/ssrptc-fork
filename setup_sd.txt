@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/bin/false 
 
 # # dd if=/dev/zero of=/dev/sdX status=progress # maybe this isnt necessary
 # # echo 'type=b' | sfdisk /dev/sdX
