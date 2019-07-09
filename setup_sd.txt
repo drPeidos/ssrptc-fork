@@ -11,15 +11,15 @@
 # # git clone https://gitlab.com/maitronix/ssrptc/ .
 # # cp Phoebe.ini ..
 # # cd ..
-# # # copy over games into in their original directory, 1 game per directory, to the root of the sdcard
+# # # copy over games in their original directory, 1 game per directory, to the root of the sdcard
 # # # once you have copied over all games, or you have added or removed games, proceed
 
 # # # to archive the original folder names and rename them to the 01/10/100 format needed by phoebe
 # # ./01/setup_numerical_names.sh
 
 # # # to restore the original folder names
-# # ./restore_original_names.sh
+# # ./01/restore_original_names.sh
 
 # # # now build the menu
 # # cd 01
-# # ./rmenu_kai_6314.sh
+# # ./rmenu.sh kai
