@@ -4,11 +4,10 @@
 # in the directory with all the 7z archives, make a folder and cd into it. then clone the ssrptc git repo here
 # now run this script to generate a script that will extract and convert the files to ccd/img/sub format.
 # you can keep a log with:
-# $ ./unar_script.sh 2>&1 | tee -a logfile 
 
 echo "#!/bin/bash" > unar_script.sh
 echo "set -x -e" >> unar_script.sh
-echo "exec > >(tee -a script.log) 2>&1" >> unar_script.sh
+echo "exec > >(tee -a unar_script.log) 2>&1" >> unar_script.sh
 
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
