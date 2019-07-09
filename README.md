@@ -55,7 +55,9 @@ http://ppcenter.webou.net/pskai/
 EXTRA NOTES:
  * I have noticed that with a 4gb sdcard with 10 games, rmenu_020 and rmenu_kai_6314
    do not boot the game correctly and i get stuck at a black screen after the sega licensing screen.
-   only rmenu_013 with the slow original reset will load the games.
+   only rmenu_013 with the slow original reset will load the games. 
+   also you have to comment out 'reset_goto = 1' in Phoebe.ini in the root of the sdcard
+
    however with a 128gb card and over 100 games, rmenu_013 doesnt work and only rmenu_020 and rmenu_kai_6314 work...
 
 
