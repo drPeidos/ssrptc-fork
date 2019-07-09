@@ -1,3 +1,5 @@
+```
+
 SSRPTC - Sega Saturn Rhea Phoebe Tool Collection
 
 all tools have only been tested on a GNU/Linux environment. YMMV. forks / patches / etc. are welcome
@@ -25,11 +27,7 @@ watch_folder_size.sh - just a script to monitor a folders size so you can plan o
 
 setup_sd.txt - tutorial on setting up / managing the sdcard for phoebe with these tools
 
-rmenu_013.sh - build the menu, using rmenu v0.1.3
-
-rmenu_020.sh - build the menu, using rmenu v0.2.0
-
-rmenu_kai_6314.sh - build the menu, using rmenukai v6.314
+rmenu.sh - build the menu, must provide 013 or 020 or kai as the only arguement
 
 Ecma-130.pdf - technical documentation that was very helpful when developing cue2ccd.py and iso2bin.py
 
@@ -54,4 +52,12 @@ RMENU_KAI is in violation of its license and you should email them demanding ful
 http://ppcenter.webou.net/pskai/
 
 
+EXTRA NOTES:
+ * I have noticed that with a 4gb sdcard with 10 games, rmenu_020 and rmenu_kai_6314
+   do not boot the game correctly and i get stuck at a black screen after the sega licensing screen.
+   only rmenu_013 with the slow original reset will load the games.
+   however with a 128gb card and over 100 games, rmenu_013 doesnt work and only rmenu_020 and rmenu_kai_6314 work...
 
+
+
+```
