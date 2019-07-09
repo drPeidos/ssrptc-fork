@@ -60,7 +60,7 @@ EXTRA NOTES:
    also you have to comment out 'reset_goto = 1' in Phoebe.ini in the root of the sdcard
 
    however with a 128gb card and over 100 games, rmenu_013 doesnt work and only rmenu_020 and rmenu_kai_6314 work...
-
+   also high_speed = 1 needs to be commented out otherwise it wont boot anything
 
 
 ```

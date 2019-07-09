@@ -20,7 +20,7 @@ fi
 [ -f rm out.iso ] && rm out.iso
 [ -f RMENU/LIST.INI ] && rm RMENU/LIST.INI
 [ -f RMENU/0.BIN ] && rm RMENU/0.BIN
-cp $ZEROBIN RMENU/0.BIN
+cp RMENU/$ZEROBIN RMENU/0.BIN
 echo "01.title=RMENU" > RMENU/LIST.INI
 echo "01.disc=1/1" >> RMENU/LIST.INI
 echo "01.region=JTUE" >> RMENU/LIST.INI
