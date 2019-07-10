@@ -31,7 +31,13 @@ echo "01.date=00000000" >> RMENU/LIST.INI
 for i in $(find ../ -maxdepth 1 -type d -name "[0-9][0-9]" -o -name "[0-9][0-9][0-9]"| awk -F'/' '{print $NF}' | sort -n | egrep -v '^1$|^01$|^001$'); do
     IMG="../$i/out.img"
     if [ -f "$IMG" ]; then
-        TITLE="$(head -c 224 "$IMG" | cut -c 113-225 | LANG=C sed 's/ *$//g')"
+
+        if [ -f "../$i/ofn.txt" ]; then
+            source "../$i/ofn.txt"
+            TITLE="$(echo "$ORIGINAL_DIRECTORY_NAME" | cut -c 1-111)"
+        else
+            TITLE="$(head -c 224 "$IMG" | cut -c 113-225 | LANG=C sed 's/ *$//g')"
+        fi
         DISC="$(head -c 224 "$IMG" | cut -b 76-78)"
         REGION="$(head -c 224 "$IMG" | cut -b 81)"
         VERSION="$(head -c 224 "$IMG" | cut -b 59-64)"
