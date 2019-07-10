@@ -17,7 +17,7 @@ else
 fi
 
 
-[ -f rm out.iso ] && rm out.iso
+[ -f out.iso ] && rm out.iso
 [ -f RMENU/LIST.INI ] && rm RMENU/LIST.INI
 [ -f RMENU/0.BIN ] && rm RMENU/0.BIN
 cp RMENU/$ZEROBIN RMENU/0.BIN
